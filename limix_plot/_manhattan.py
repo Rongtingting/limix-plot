@@ -10,7 +10,7 @@ def manhattan(data, colora="#5689AC", colorb="#21334F",
     ----------
     data : DataFrame, dict
         DataFrame containing the chromosome, base-pair positions, and
-        p-values.
+        BAF-values.
     colora : matplotlib color
         Points color of the first group.
     colorb : matplotlib color
@@ -33,6 +33,7 @@ def manhattan(data, colora="#5689AC", colorb="#21334F",
         >>>
         >>> df = lp.load_dataset('gwas')
         >>> df = df.rename(columns={"chr": "chrom"})
+        >>> df = df.rename(columns={"pv": "BAF"})
         >>> print(df.head())
             chrom     pos       pv
         234    10  224239  0.00887
@@ -53,7 +54,7 @@ def manhattan(data, colora="#5689AC", colorb="#21334F",
 
     if isinstance(data, pd.DataFrame):
         data = DataArray(
-            data=data["pv"],
+            data=data["BAF"],
             dims=["candidate"],
             coords={k: ("candidate", data[k]) for k in data.columns},
         )
@@ -106,7 +107,7 @@ def manhattan(data, colora="#5689AC", colorb="#21334F",
     ax.set_xlim(data["abs_pos"].min(), data["abs_pos"].max())
     ax.set_ylim(0, ax.get_ylim()[1])
 
-    ax.set_ylabel("pv")
+    ax.set_ylabel("BAF")
     ax.set_xlabel("chromosome")
 
     u = unique(data["chrom"].values)
@@ -120,8 +121,8 @@ def _plot_points(ax, data, alpha, null_style, alt_style):
     null = data.loc[data.values >= alpha, :]
     alt = data.loc[data.values < alpha, :]
 
-    ax.plot(null["abs_pos"], -log10(null.values), ".", ms=7, **null_style)
-    ax.plot(alt["abs_pos"], -log10(alt.values), ".", ms=7, **alt_style)
+    ax.plot(null["abs_pos"], null.values, ".", ms=7, **null_style)
+    ax.plot(alt["abs_pos"], alt.values, ".", ms=7, **alt_style)
 
 
 def _set_ticks(ax, chrom_bounds, chrom_labels):
