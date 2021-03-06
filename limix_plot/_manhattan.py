@@ -90,7 +90,7 @@ def manhattan(data, colora="#5689AC", colorb="#21334F",
         ok = data["order"] == c
         pts_kws["color"] = colors[i % 2]
         x = data.loc[ok]["abs_pos"]
-        y = -log10(data.loc[ok].values)
+        y = data.loc[ok].values
         ax.plot(x, y, **pts_kws)
         
         if anno_pv_max is not None:
@@ -106,7 +106,7 @@ def manhattan(data, colora="#5689AC", colorb="#21334F",
     ax.set_xlim(data["abs_pos"].min(), data["abs_pos"].max())
     ax.set_ylim(0, ax.get_ylim()[1])
 
-    ax.set_ylabel("-log$_{10}$pv")
+    ax.set_ylabel("pv")
     ax.set_xlabel("chromosome")
 
     u = unique(data["chrom"].values)
