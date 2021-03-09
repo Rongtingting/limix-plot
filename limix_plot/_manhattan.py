@@ -95,7 +95,7 @@ def manhattan(data, colora="#5689AC", colorb="#21334F",
         ax.plot(x, y, **pts_kws)
         
         if anno_pv_max is not None:
-            _idx = where(y > -log10(anno_pv_max))[0]
+            _idx = where(y > anno_pv_max)[0]
             for _ii in _idx:
                 if 'id' in data.coords:
                     _txt = data['id'].loc[ok].loc[_ii].values
